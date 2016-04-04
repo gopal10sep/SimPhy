@@ -3,6 +3,7 @@ import os
 import sys
 import inputbox
 from errorScreen import errorScreen
+from endScreen import endScreen
 from pygame.locals import *
 
 class animation2:
@@ -13,10 +14,8 @@ class animation2:
 		pygame.display.set_caption('Animation')
 		WHITE = (255, 255, 255)
 		block = pygame.image.load('Images/3.png')
-	
 		background = pygame.image.load('Images/4.png')
 		screen.blit(background,(0,0))
-		
 		blockx = 267
 		blocky = 0
 		textpos = text.get_rect()
@@ -27,14 +26,9 @@ class animation2:
 			screen.blit(background,(0,0))
 			if direction == 'down':
 				blocky += 5
-		        	
-
-				
 			if blocky>450 :
-				errorScreen(screen,"Oops.. The block fell down !")
-				#screen.blit(infinity,(400,200))
+				endScreen(screen,"Oops.. The block fell down !")
 			screen.blit(block, (blockx,blocky))
-			
 			for event in pygame.event.get():
 				if event.type == QUIT:
 					pygame.quit()
