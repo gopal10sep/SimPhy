@@ -5,7 +5,6 @@ import os
 import sys
 import inputbox
 import teststart
-pygame.init()
 
 class endScreen:
 	def __init__(self, screen,text):
