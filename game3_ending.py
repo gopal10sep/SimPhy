@@ -4,28 +4,20 @@ from Button import Button
 import sys
 import inputbox
 import teststart
-from constants import *
-from const_colors import *
+import theory_game3
 
-class errorScreen:
+class game3_ending:
 	def __init__(self, DISPLAY_SURF,text):
-	    # set up music
-		pygame.mixer.music.load('Sound/error.ogg')
-		pygame.mixer.music.play(-1, 0.0)
+		print ("hi game3_ending")
 		fontobject = pygame.font.Font(None,18)
-		bckgd = pygame.image.load('Images/error.jpg')
-		DISPLAY_SURF.blit(bckgd,SCREEN_TOPLEFT)
-		pygame.draw.rect(DISPLAY_SURF, (75,100,25),((DISPLAY_SURF.get_width() / 2) - 100,100,200,20), 0)
-		pygame.draw.rect(DISPLAY_SURF, WHITE,((DISPLAY_SURF.get_width() / 2) - 102,98,204,24), 1)
-		
+		if pygame.mixer.music.get_busy():
+			pygame.mixer.music.stop()
+		pygame.mixer.music.load('Sound/bomb.ogg')
+		pygame.mixer.music.play(-1, 0.0)
 		if len(text) != 0:
-			DISPLAY_SURF.blit(fontobject.render(text, 1, WHITE),((DISPLAY_SURF.get_width() / 2) - 100, 100))
-			pygame.display.flip()
 			btn_replay = pygame.image.load('Images/buttons/playagain.png')
 			btn_exit = pygame.image.load('Images/buttons/exitbutton.png')
-
-			#btnReplay = Button('  Play Again ?')
-			#btnExit = Button('          Exit' )
+			btn_learnmore = pygame.image.load('Images/buttons/learnbutton.png')
 			clock = pygame.time.Clock()
 			run1= True;
 			while run1:
@@ -44,16 +36,18 @@ class errorScreen:
 							print ("restart")
 							teststart.start(DISPLAY_SURF)
 						elif rect_exit.collidepoint(mouse):
-							print ("exit")
 							if pygame.mixer.music.get_busy():
 								pygame.mixer.music.stop()
-							run1= False;
+							print ("exit")
+							run1 = False
 							pygame.quit()
 							sys.exit()
+						elif rect_learnmore.collidepoint (mouse):
+							theory_game3.theory_game3(DISPLAY_SURF)
+													
 							
-				rect_replay = DISPLAY_SURF.blit(btn_replay ,(130,(DISPLAY_SURF.get_height()-100)))
-				rect_exit = DISPLAY_SURF.blit(btn_exit,(320,(DISPLAY_SURF.get_height()-100)))
-				#btnReplay.draw(DISPLAY_SURF, mouse, (150,(DISPLAY_SURF.get_height()-100),100,20), (150,(DISPLAY_SURF.get_height()-100)))
-				#btnExit.draw(DISPLAY_SURF, mouse, (300,(DISPLAY_SURF.get_height()-100),100,20), (300,(DISPLAY_SURF.get_height()-100)))
+				rect_replay = DISPLAY_SURF.blit(btn_replay ,(10,260))
+				rect_exit = DISPLAY_SURF.blit(btn_exit,(210,260))
+				rect_learnmore= DISPLAY_SURF.blit(btn_learnmore,(410,260))
 				pygame.display.update()
 				clock.tick(60)

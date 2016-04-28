@@ -1,45 +1,85 @@
 import pygame
-import os
 import sys
-import demo
 import teststart
 import pyganim
 import string
-
+from constants import *
+from const_colors import *
 from pygame.locals import *
-pygame.init()
 
-Black = (0,0,0)
-SCREEN_WIDTH = 600
-top_left = (10,10)
-clock = pygame.time.Clock()
-screen = pygame.display.set_mode((SCREEN_WIDTH,400), 0, 32)
-screen.fill((255,255,255))
-einstein = pygame.image.load('Images/einstein/1.jpg')
-string1 = 'This is Simphy.'
-string2 = 'It is a Physics Simulation Game.'
-string3 = 'It helps in leaning Physics concepts.'
+def mainScreen():
 
-endIndex1 = 1
-endIndex2 = 1
-endIndex3 = 1
-fontObj = pygame.font.Font(None,32)
+	pygame.init()
+	#BLACK = (0,0,0)
+	#SCREEN_WIDTH = 600
+	top_left = (10,10)
+	clock = pygame.time.Clock()
+	DISPLAY_SURF = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT), 0, 32)
+	#DISPLAY_SURF.fill(RED)
+	DISPLAY_SURF.fill(WHITE)
+	pygame.display.update()
 
-einstein_Anim = pyganim.PygAnimation([('Images/einstein/1.jpg', 0.1),
-                                 ('Images/einstein/2.jpg', 0.1),
-                                 ('Images/einstein/3.jpg', 0.1),])
-                                 
-einstein_Anim.play()
-#textSurfaceObj = fontObj.render(string[0:endIndex1],True,Black)
-#endIndex += 1
-#textRectObj = textSurfaceObj.get_rect()
-#textRectObj.topleft = top_left
-run = True
-while run:
-		
+	einstein = pygame.image.load('Images/einstein/1.jpg')
+	einstein_Anim = pyganim.PygAnimation([('Images/einstein/1.jpg', 0.1),('Images/einstein/2.jpg', 0.1),('Images/einstein/3.jpg', 0.1),])              
+	einstein_Anim.play()
+	fontObj = pygame.font.Font(None,32)
+
+	x = 10
+	#file = open('SimPhy_Introduction.txt')
+	with open('SimPhy_Introduction.txt') as file :
+		for line in file :
+			endIndex = len(line)
+			string1 = line
+
+			for curIndex in range(endIndex):
+				############
+				
+				mouse = pygame.mouse.get_pos()
+				for event in pygame.event.get():
+					escapeText = fontObj.render("Press Escape to skip",True,BLACK)
+					if event.type == pygame.QUIT:
+						run = False
+						pygame.quit()
+						sys.exit()
+					if event.type == KEYDOWN:
+						inkey = event.key
+						if inkey == K_ESCAPE :
+							run = False
+							teststart.start(DISPLAY_SURF)
+
+				###########
+				einstein_Anim.blit(DISPLAY_SURF, (SCREEN_WIDTH - einstein.get_width(),SCREEN_HEIGHT - einstein.get_height()))
+
+				textSurfaceObj = fontObj.render(string1[0:curIndex],True,BLACK)
+				textRectObj = textSurfaceObj.get_rect()
+				textRectObj.topleft = top_left
+				DISPLAY_SURF.blit(textSurfaceObj,textRectObj)
+				DISPLAY_SURF.blit(escapeText,(50,300))
+
+				pygame.display.update()
+				clock.tick(10)
+
+				
+			x+=40
+			top_left = (10,x)
+
+		#### the Simphy-introduction file has last line with few spaces so that program waits for some milliseconds after printing text	
+		teststart.start(DISPLAY_SURF)
+				
+	string1 = 'This is Simphy.'
+	string2 = 'It is a Physics Simulation Game.'
+	string3 = 'It helps in leaning Physics concepts.'
+	endIndex1 = 1
+	endIndex2 = 1
+	endIndex3 = 1
+	fontObj = pygame.font.Font(None,32)
+	
+	run = True
+
+	while run:
 		mouse = pygame.mouse.get_pos()
 		for event in pygame.event.get():
-			escapeText = fontObj.render("Press Escape to skip",True,Black)
+			escapeText = fontObj.render("Press Escape to skip",True,BLACK)
 			if event.type == pygame.QUIT:
 				run = False
 				pygame.quit()
@@ -48,41 +88,11 @@ while run:
 				inkey = event.key
 				if inkey == K_ESCAPE :
 					run = False
-					teststart.start(screen)
+					teststart.start(DISPLAY_SURF)
 
-		if endIndex1 < 15 :
-			endIndex1 += 1
-			textSurfaceObj = fontObj.render(string1[0:endIndex1],True,Black)
-			
-		elif endIndex2 < 34:
-			endIndex2 += 1
-			textRectObj = textSurfaceObj.get_rect()
-			textRectObj.topleft = top_left
-			textSurfaceObj = fontObj.render(string1[0:endIndex1],True,Black)
-			top_left = (10,60)
-			textSurfaceObj = fontObj.render(string2[0:endIndex2],True,Black)
-		elif endIndex3 < 40 :
-			clock.tick(1000)
-			endIndex3 += 1
-			top_left = (10,10)
-			textRectObj = textSurfaceObj.get_rect()
-			textRectObj.topleft = top_left
-			textSurfaceObj = fontObj.render(string1[0:endIndex1],True,Black)
-			top_left = (10,60)
-			textSurfaceObj = fontObj.render(string2[0:endIndex2],True,Black)
-			top_left = (10,120)
-			textSurfaceObj = fontObj.render(string3[0:endIndex3],True,Black)
-		else :
-			teststart.start(screen)
-			
-			
-		einstein_Anim.blit(screen, (SCREEN_WIDTH - einstein.get_width(),400 - einstein.get_height()))
-		#screen.blit(einstein,(SCREEN_WIDTH - einstein.get_width(),400 - einstein.get_height()))
-		#textSurfaceObj = fontObj.render(string1[0:endIndex],True,Black)
-		textRectObj = textSurfaceObj.get_rect()
-		textRectObj.topleft = top_left
-		screen.blit(escapeText,(50,300))
-		screen.blit(textSurfaceObj,textRectObj)	
-		pygame.display.update()
-		
+		pygame.display.update()	
 		clock.tick(10)
+
+#main starts
+if __name__ == "__main__":
+	mainScreen()
